@@ -1,6 +1,6 @@
 fnames = {'France','Japan','Greece','T & T','USA'}; %Country labels. T&T is Trinidad and Tobago
 N = [1 2 3 5 10];
-k = 1;
+k = 1; %k gives the position for each image when plotting
 h = figure(1);
 set(h,'units','normalized','outerposition',[0 0 1 1]); %expands figure to full screen
 
@@ -14,13 +14,27 @@ for j = 1:5
     set(gca,'XTick',[],'YTick',[],'FontWeight','bold'); ylabel(fnames{j});
     
     %put your SVD code here:
-    [U,S,V] = svd(X);
+    [U,S,V] = svd(X); %computes SVD
 
+    %extracting singular values
+    singval = zeros(1,400);%preallocate memory for efficiency
+    for l = 1:400
+        singval(1,l) = S(l,l);
+    end
+
+    %plotting singular values
+    x = 1:400;
+    figure(2);
+    semilogy(x,singval);
+    grid on;
+    hold on;
+    legend('France', 'Japan', 'Greece', 'T and T','US')
+    %Computes rank-n approximation and plots for each value of N.
     for i = 1:5
         cimg = U(:,1:N(i))*S(1:N(i),1:N(i))*V(:,1:N(i))';
         figure(1);
         subplot(5,6, k + i); imagesc(cimg,[0 255]); axis image; colormap gray;
         set(gca,'XTick',[],'YTick',[],'FontWeight','bold'); ylabel(fnames{j});
     end
-    k = k + 6;
+    k = k + 6; %k is updated to represent a new position in the figure
 end
