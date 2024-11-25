@@ -1,0 +1,26 @@
+fnames = {'France','Japan','Greece','T & T','USA'}; %Country labels. T&T is Trinidad and Tobago
+N = [1 2 3 5 10];
+k = 1;
+h = figure(1);
+set(h,'units','normalized','outerposition',[0 0 1 1]); %expands figure to full screen
+
+for j = 1:5
+    fname = sprintf('flag%d.png',j);
+    X = imread(fname);
+    X = double(X);  %convert from uint8 to double precision float
+    
+    figure(1);
+    subplot(5,6,(j-1)*6 + 1); imagesc(X,[0 255]); axis image; colormap gray;
+    set(gca,'XTick',[],'YTick',[],'FontWeight','bold'); ylabel(fnames{j});
+    
+    %put your SVD code here:
+    [U,S,V] = svd(X);
+
+    for i = 1:5
+        cimg = U(:,1:N(i))*S(1:N(i),1:N(i))*V(:,1:N(i))';
+        figure(1);
+        subplot(5,6, k + i); imagesc(cimg,[0 255]); axis image; colormap gray;
+        set(gca,'XTick',[],'YTick',[],'FontWeight','bold'); ylabel(fnames{j});
+    end
+    k = k + 6;
+end
