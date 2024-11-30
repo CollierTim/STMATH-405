@@ -1,0 +1,17 @@
+x = linspace(0,1,51)';
+y = x.*cos(exp(2*x));
+v = 0;
+A = ones(51,1); %first column of A (constant term)
+for k = 1:6
+    %Plot data. 
+    figure(1); subplot(2,3,k); plot(x,y,'bo'); 
+    title(sprintf('k=%d',k)); hold on;
+
+    %put your code here
+    A(:, k+1) = x.^k; %appends the size of the matrix and includes the x^k column
+    v = A\y; %finds least squares solution for each k-value
+    resid = norm(A*v - y, 2); %finds the 2-norm for each k value
+    fprintf('2-norm residual for a k value of %d = %.15f\n',k,resid); %prints the 2-norm
+    figure(1); subplot(2,3,k); plot(x,A*v,'bo'); %plots the least squares solution against the actual solution
+    hold off;
+end
